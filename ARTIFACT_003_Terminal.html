@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNIS NODE 77 [DISCONNECTED]</title>
+    <style>
+        :root {
+            --phosphor-main: #33ff00;
+            --phosphor-dim: #22aa00;
+            --bg-color: #050505;
+            --scanline-color: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--phosphor-main);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            text-shadow: 0 0 5px var(--phosphor-dim);
+        }
+
+        /* CRT Effects */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                to bottom,
+                var(--scanline-color) 50%,
+                rgba(0, 0, 0, 0) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .crt::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.027906; }
+            5% { opacity: 0.048532; }
+            10% { opacity: 0.041339; }
+            15% { opacity: 0.09658; }
+            20% { opacity: 0.024774; }
+            25% { opacity: 0.038594; }
+            30% { opacity: 0.065798; }
+            35% { opacity: 0.062084; }
+            40% { opacity: 0.046038; }
+            45% { opacity: 0.024108; }
+            50% { opacity: 0.049387; }
+            55% { opacity: 0.080512; }
+            60% { opacity: 0.071803; }
+            65% { opacity: 0.057398; }
+            70% { opacity: 0.067341; }
+            75% { opacity: 0.091173; }
+            80% { opacity: 0.02534; }
+            85% { opacity: 0.094554; }
+            90% { opacity: 0.076615; }
+            95% { opacity: 0.079267; }
+            100% { opacity: 0.09264; }
+        }
+
+        #terminal {
+            z-index: 1;
+            white-space: pre-wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background-color: var(--phosphor-main);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: var(--phosphor-main);
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            width: 50%;
+            text-shadow: 0 0 5px var(--phosphor-dim);
+            text-transform: uppercase;
+        }
+        
+        .hidden { display: none; }
+        .error { color: #ff3333; text-shadow: 0 0 5px #aa0000; }
+        .system { color: #aaaaaa; }
+    </style>
+</head>
+<body class="crt">
+    <div id="terminal">
+        <div id="output">
+OMNIS SYSTEMS [SECURE TERMINAL]
+KERNEL: v9.2a (SAFE_MODE)
+CONNECTION: ENCRYPTED // NODE-77
+
+> SYSTEM ALERT: BACKDOOR DETECTED.
+> AUTHENTICATION REQUIRED.
+
+</div>
+        <div id="input-line">
+            <span>root@omnis:~$ </span>
+            <input type="text" id="cmd" autofocus autocomplete="off">
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('cmd');
+        const output = document.getElementById('output');
+        const inputLine = document.getElementById('input-line');
+        
+        // AES-GCM Encrypted Blob
+        const CONFIG = {
+            iv: "0080782ff7f59a2cd124146f",
+            data: "341fa69934dadc58accbdd2b9b90d7865c9cad9e005ce508ff1c79f663729f9d9684ba111aa6defc8f21c8cf53f088cff35f93d4e0f76def19ec80314692426322ed1a7514ef013b74d301c4ea74fbcddd211ca84437526fb5fc669d44e839052afce0b253a4beb698fd13e26b4e00771a336821e82216970357bbb249335cbd03f52311e0a1af2c31e8359b75d9f8b5dab26ff4a901482a1183c84e8a039e6c06d25858a2161ec01aa7b792bb4f448f24d49828665bf5f44b74df62f49146642144deb187e1abbf4d8aea7b45fa2bc66fe89fc0af1cf03693f015350c72111c5e6fac7e344ffa6331fb595c5c056b1dfbddb702afb92e053b757e3b0589ddba629ba3c29c672b1d5662019c2f0ea671b6e2a27e068a615b0545ed2306931a168aa3c25b84ef5c9d3235201221a0a66907f2bb09802f7c45e9325c8048bb766c0750fba30e5cddc0f5f6d76bdaf3e3080761ec328c183c246475729e572fc6346f490cb1c67578d1055b0726c3510c153f64fbcb385cfc4c425502abad40e565089f65627e1629f8c624ee0a68488f6d521359815d44a2d2a374509b213ecec88b27b16c033cf1b757df035c9ac1213c21a04bfd19e5a17101ea29cd021961452da1e1700fd7efacd78810fc1f27528db69fb188d66b74b21f646561d1e8e5579a01a1847ab5d03ab37d524aa9aa329724ac538778a3eded2ec8a28defecda48979486442bd5f78ded9e8dcdb5c1e39ee120e2692b0c9f9747bb5b5c5e1d868de4ba08"
+        };
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmd = input.value.trim().toUpperCase();
+                processCommand(cmd);
+                input.value = '';
+            }
+        });
+
+        // Keep focus
+        document.addEventListener('click', () => input.focus());
+
+        async function processCommand(cmd) {
+            printLine(`root@omnis:~$ ${cmd}`);
+            
+            try {
+                // 1. Derive Key from Password (SHA-256)
+                const keyMaterial = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(cmd));
+                const key = await crypto.subtle.importKey(
+                    "raw", 
+                    keyMaterial, 
+                    "AES-GCM", 
+                    false, 
+                    ["decrypt"]
+                );
+
+                // 2. Prepare Data
+                const iv = hexToArrayBuffer(CONFIG.iv);
+                const data = hexToArrayBuffer(CONFIG.data);
+
+                // 3. Attempt Decrypt
+                const decryptedBuffer = await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: iv },
+                    key,
+                    data
+                );
+
+                // 4. Decode Result
+                const decryptedText = new TextDecoder().decode(decryptedBuffer);
+                
+                // Success!
+                inputLine.style.display = 'none';
+                typewriterEffect(decryptedText);
+
+            } catch (e) {
+                // Decryption failed (wrong key) or other error
+                if (cmd === 'HELP') {
+                    printLine('> HINT: The key was in the blob.', 'system');
+                } else {
+                    printLine('> ACCESS DENIED. DECRYPTION FAILED.', 'error');
+                }
+            }
+            
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        function hexToArrayBuffer(hexString) {
+            return new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+        }
+
+        function printLine(text, className = '') {
+            const div = document.createElement('div');
+            div.textContent = text;
+            if (className) div.classList.add(className);
+            output.appendChild(div);
+        }
+
+        function typewriterEffect(text) {
+            let i = 0;
+            const speed = 30; // ms
+            
+            function type() {
+                if (i < text.length) {
+                    output.innerHTML += text.charAt(i);
+                    i++;
+                    window.scrollTo(0, document.body.scrollHeight);
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
